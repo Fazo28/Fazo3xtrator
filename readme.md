@@ -1,130 +1,150 @@
-- 🚀 Generate reports for HackerOne, Bugcrowd, HackenProof, and other platforms
-- 🎨 Beautiful colorized interface
-- 📝 Customizable report templates
-- 🔄 Easy update system
-- 💻 Cross-platform support (Windows, Kali Linux, Termux)
-- 📊 Multiple output formats
+Fazo3xtrator - Bug Bounty Report Generator
 
-## Installation
+<pre>
+███████╗ █████╗ ███████╗ ██████╗ ██████╗ ██╗  ██╗████████╗██████╗  █████╗ ████████╗
+╚══██╔══╝██╔══██╗╚══███╔╝██╔═══██╗██╔══██╗╚██╗██╔╝╚══██╔══╝██╔══██╗██╔══██╗╚══██╔══╝
+   ██║   ███████║  ███╔╝ ██║   ██║██████╔╝ ╚███╔╝    ██║   ██████╔╝███████║   ██║   
+   ██║   ██╔══██║ ███╔╝  ██║   ██║██╔══██╗ ██╔██╗    ██║   ██╔══██╗██╔══██║   ██║   
+   ██║   ██║  ██║███████╗╚██████╔╝██║  ██║██╔╝ ██╗   ██║   ██║  ██║██║  ██║   ██║   
+   ╚═╝   ╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   
+</pre>
 
-### Prerequisites
+A modern, cross-platform tool for bug bounty hunters to generate professional vulnerability reports
 
-- Python 3.6 or higher
-- pip (Python package manager)
+---
 
-### Step-by-Step Installation
+✨ Features
 
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/yourusername/Fazo3xtrator.git
-   cd Fazo3xtrator
-```
+· 🚀 Generate reports for HackerOne, Bugcrowd, HackenProof
+· 📝 Customizable report templates
+· 🔄 Easy update system
+· 💻 Cross-platform support
+· 📊 Multiple output formats
 
-1. Install required dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-   Or manually install:
-   ```bash
-   pip install colorama requests
-   ```
-2. Run the tool:
-   ```bash
-   python main.py
-   ```
+---
 
-Platform-Specific Instructions
+📦 Installation
 
-Windows
+Prerequisites
 
-1. Download and install Python from python.org
-2. Open Command Prompt and follow the installation steps above
+· Python 3.6+
+· pip package manager
 
-Kali Linux
+Quick Install
 
 ```bash
-sudo apt update
+git clone https://github.com/Fazo28/Fazo3xtrator.git
+cd Fazo3xtrator
+pip install -r requirements.txt
+python main.py
+```
+
+---
+
+🖥️ Platform Support
+
+Windows:
+
+```bash
+# Install Python from python.org then:
+python main.py
+```
+
+Kali Linux:
+
+```bash
 sudo apt install python3 python3-pip git
-git clone https://github.com/yourusername/Fazo3xtrator.git
+git clone https://github.com/Fazo28/Fazo3xtrator.git
 cd Fazo3xtrator
 pip3 install -r requirements.txt
 python3 main.py
 ```
 
-Termux (Android)
+Termux (Android):
 
 ```bash
-pkg update
 pkg install python git
-git clone https://github.com/yourusername/Fazo3xtrator.git
+git clone https://github.com/Fazo28/Fazo3xtrator.git
 cd Fazo3xtrator
 pip install colorama requests
 python main.py
 ```
 
-Usage
+---
 
-1. Start the tool:
-   ```bash
-   python main.py
-   ```
-2. Select an option from the main menu:
-   · [1] Create New Report: Generate a new bug bounty report
-   · [2] View Report Templates: Preview available report templates
-   · [3] Update Tool: Check for and install updates
-   · [4] Help: Show help information
-   · [5] Exit: Exit the tool
-3. Follow the prompts to provide information about the vulnerability
-4. Your report will be saved in the reports/ directory
+🚀 Usage
 
-Report Templates
-
-Fazo3xtrator includes templates for:
-
-· HackerOne: Standard template for HackerOne bug reports
-· Bugcrowd: Template optimized for Bugcrowd submissions
-· HackenProof: Specific template for HackenProof programs
-· Generic: A general template for other bug bounty platforms
-
-You can customize these templates or create new ones in the templates/ directory.
-
-Updating
-
-To update Fazo3xtrator to the latest version:
-
-1. Run the tool and select option [3] Update Tool
-2. Or manually run: git pull in the tool directory
-
-Contributing
-
-We welcome contributions! Please feel free to submit pull requests, report bugs, or suggest new features.
-
-1. Fork the repository
-2. Create a feature branch: git checkout -b new-feature
-3. Commit your changes: git commit -am 'Add new feature'
-4. Push to the branch: git push origin new-feature
-5. Submit a pull request
-
-Support
-
-If you encounter any issues or have questions:
-
-1. Check the Issues page
-2. Create a new issue if your problem isn't already listed
-3. Contact us at: support@fazo3xsecurity.com
-
-License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-Disclaimer
-
-This tool is intended for educational and ethical security testing purposes only. Only use this tool on systems you own or have explicit permission to test. The developers are not responsible for any misuse or damage caused by this tool.
-
-Screenshots
-
-https://via.placeholder.com/600x300/1A202C/FFFFFF/?text=Main+Menu+Preview https://via.placeholder.com/600x300/2D3748/FFFFFF/?text=Report+Generation+Preview
+1. Launch: python main.py
+2. Select option from menu:
+   · [1] Create New Report
+   · [2] View Templates
+   · [3] Update Tool
+   · [4] Help
+   · [5] Exit
+3. Follow prompts to generate reports
+4. Reports saved in reports/ directory
 
 ---
 
-Happy Bug Hunting! 🐛🔍
+📋 Templates Included
+
+· HackerOne - Standard bug reports
+· Bugcrowd - Optimized submissions
+· HackenProof - Platform-specific format
+· Generic - General purpose template
+
+Customize templates in templates/ directory
+
+---
+
+🔄 Updates
+
+Auto-update:
+
+· Select [3] Update Tool in main menu
+
+Manual update:
+
+```bash
+git pull
+```
+
+---
+
+🤝 Contributing
+
+1. Fork repository
+2. Create feature branch
+3. Commit changes
+4. Push to branch
+5. Submit pull request
+
+---
+
+🆘 Support
+
+· Check Issues
+· Create new issue if needed
+· Email: support@fazo3xsecurity.com
+
+---
+
+📄 License
+
+MIT License - See LICENSE file
+
+---
+
+⚠️ Disclaimer
+
+For educational and ethical security testing only. Use only on systems you own or have permission to test. Not responsible for misuse.
+
+---
+
+🐛 Happy Bug Hunting!
+
+Fazo3xtrator - Your ultimate bug bounty reporting companion! 🔍
+
+Report | Document | Succeed
+
+Developed By Fazo28tz
