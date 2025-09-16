@@ -5,6 +5,7 @@ import os
 import sys
 import json
 import time
+import xml.etree.ElementTree as ET
 from datetime import datetime
 from pathlib import Path
 
@@ -27,8 +28,8 @@ init(autoreset=True)
 
 # Tool information
 TOOL_NAME = "Fazo3xtrator"
-VERSION = "1.0.0"
-AUTHOR = "fazotz"
+VERSION = "1.1.0"
+AUTHOR = "Fazo28"
 DESCRIPTION = "Advanced Bug Bounty Report Generator"
 
 # Banner
@@ -49,7 +50,7 @@ def check_update():
     print(f"{Fore.CYAN}[*] Checking for updates...{Style.RESET_ALL}")
     try:
         # In a real scenario, you would fetch this from a remote server
-        latest_version = "1.0.0"
+        latest_version = "1.1.0"
         
         if VERSION < latest_version:
             print(f"{Fore.YELLOW}[!] New version available: {latest_version}{Style.RESET_ALL}")
@@ -77,7 +78,8 @@ def view_templates():
         "1": "HackerOne Template",
         "2": "Bugcrowd Template", 
         "3": "HackenProof Template",
-        "4": "Generic Template"
+        "4": "Generic Template",
+        "5": "Acunetix Template"
     }
     
     print(f"\n{Fore.CYAN}Available Templates:{Style.RESET_ALL}")
@@ -101,6 +103,142 @@ def view_templates():
     else:
         print(f"{Fore.RED}[!] Invalid selection{Style.RESET_ALL}")
 
+# Format selection
+def select_format():
+    formats = {
+        "1": "txt",
+        "2": "html",
+        "3": "xml",
+        "4": "json"
+    }
+    
+    print(f"\n{Fore.CYAN}Select Output Format:{Style.RESET_ALL}")
+    print(f"{Fore.GREEN}[1] Text (.txt)")
+    print(f"[2] HTML (.html)")
+    print(f"[3] XML (.xml)")
+    print(f"[4] JSON (.json){Style.RESET_ALL}")
+    
+    choice = input(f"\n{Fore.YELLOW}[?] Select format: {Style.RESET_ALL}")
+    
+    if choice in formats:
+        return formats[choice]
+    else:
+        print(f"{Fore.RED}[!] Invalid selection, defaulting to TXT{Style.RESET_ALL}")
+        return "txt"
+
+# Convert to HTML
+def convert_to_html(report_content, title):
+    html_template = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{title} - Vulnerability Report</title>
+    <style>
+        body {{
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }}
+        .container {{
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }}
+        h1, h2, h3 {{
+            color: #2c3e50;
+        }}
+        h1 {{
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }}
+        .section {{
+            margin-bottom: 20px;
+        }}
+        .severity {{
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+        }}
+        .critical {{ background-color: #e74c3c; color: white; }}
+        .high {{ background-color: #f39c12; color: white; }}
+        .medium {{ background-color: #f1c40f; color: black; }}
+        .low {{ background-color: #27ae60; color: white; }}
+        pre {{
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        {report_content.replace('\n', '<br>').replace('## ', '<h2>').replace('</h2>', '</h2>')}
+    </div>
+</body>
+</html>"""
+    return html_template
+
+# Convert to XML
+def convert_to_xml(report_data, title):
+    root = ET.Element("vulnerabilityReport")
+    
+    ET.SubElement(root, "title").text = title
+    ET.SubElement(root, "date").text = datetime.now().isoformat()
+    
+    sections = report_data.split('\n\n')
+    for section in sections:
+        if section.strip():
+            lines = section.split('\n')
+            if lines:
+                section_name = lines[0].replace('##', '').strip()
+                if section_name:
+                    section_elem = ET.SubElement(root, "section")
+                    ET.SubElement(section_elem, "name").text = section_name
+                    content = '\n'.join(lines[1:]).strip()
+                    if content:
+                        ET.SubElement(section_elem, "content").text = content
+    
+    return ET.tostring(root, encoding='unicode', method='xml')
+
+# Convert to JSON
+def convert_to_json(report_data, title):
+    report_dict = {
+        "title": title,
+        "date": datetime.now().isoformat(),
+        "content": report_data
+    }
+    return json.dumps(report_dict, indent=2)
+
+# Save report in different formats
+def save_report(report_content, template_name, format_type):
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    reports_dir = "reports"
+    
+    if not os.path.exists(reports_dir):
+        os.makedirs(reports_dir)
+    
+    filename = f"{reports_dir}/{template_name}_report_{timestamp}.{format_type}"
+    
+    if format_type == "html":
+        report_content = convert_to_html(report_content, template_name.capitalize())
+    elif format_type == "xml":
+        report_content = convert_to_xml(report_content, template_name.capitalize())
+    elif format_type == "json":
+        report_content = convert_to_json(report_content, template_name.capitalize())
+    
+    with open(filename, 'w', encoding='utf-8') as f:
+        f.write(report_content)
+    
+    return filename
+
 # Create report
 def create_report():
     print(f"\n{Fore.CYAN}[*] Creating New Report{Style.RESET_ALL}")
@@ -110,7 +248,8 @@ def create_report():
         "1": "hackerone",
         "2": "bugcrowd",
         "3": "hackenproof", 
-        "4": "generic"
+        "4": "generic",
+        "5": "acunetix"
     }
     
     print(f"\n{Fore.CYAN}Select Template:{Style.RESET_ALL}")
@@ -129,6 +268,9 @@ def create_report():
     if not os.path.exists(template_file):
         print(f"{Fore.RED}[!] Template file not found{Style.RESET_ALL}")
         return
+    
+    # Select output format
+    format_type = select_format()
     
     # Load template
     with open(template_file, 'r') as f:
@@ -159,17 +301,11 @@ def create_report():
         report_content = report_content.replace(placeholder, value)
     
     # Add timestamp
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     report_content = report_content.replace("{timestamp}", timestamp)
     
-    # Save report
-    reports_dir = "reports"
-    if not os.path.exists(reports_dir):
-        os.makedirs(reports_dir)
-    
-    filename = f"{reports_dir}/{template_name}_report_{timestamp}.txt"
-    with open(filename, 'w') as f:
-        f.write(report_content)
+    # Save report in selected format
+    filename = save_report(report_content, template_name, format_type)
     
     print(f"\n{Fore.GREEN}[+] Report generated successfully: {filename}{Style.RESET_ALL}")
     
@@ -202,7 +338,8 @@ def show_help():
   This tool helps bug bounty hunters generate professional reports for various platforms.
 
 {Fore.GREEN}Features:{Style.RESET_ALL}
-  - Generate reports for HackerOne, Bugcrowd, HackenProof, and other platforms
+  - Generate reports for HackerOne, Bugcrowd, HackenProof, Acunetix, and other platforms
+  - Multiple output formats: TXT, HTML, XML, JSON
   - Customizable templates
   - Cross-platform (Windows, Kali Linux, Termux)
   - Colorized output for better readability
@@ -213,6 +350,12 @@ def show_help():
   [3] Update Tool: Check for and install updates
   [4] Help: Show this help message
   [5] Exit: Exit the tool
+
+{Fore.GREEN}Output Formats:{Style.RESET_ALL}
+  - TXT: Plain text format
+  - HTML: Web page format with styling
+  - XML: Structured data format
+  - JSON: JavaScript Object Notation
 
 {Fore.GREEN}Installation:{Style.RESET_ALL}
   See README.md for detailed installation instructions
@@ -381,6 +524,64 @@ Vulnerable URL: {url}
 
 ## Additional Information
 [Add any additional information here]"""
+        },
+        "acunetix.json": {
+            "name": "Acunetix Report Template",
+            "fields": [
+                {
+                    "name": "title",
+                    "type": "text",
+                    "prompt": "Vulnerability Title"
+                },
+                {
+                    "name": "severity",
+                    "type": "text",
+                    "prompt": "Severity Level"
+                },
+                {
+                    "name": "url",
+                    "type": "text",
+                    "prompt": "Affected URL"
+                },
+                {
+                    "name": "description",
+                    "type": "multiline",
+                    "prompt": "Vulnerability Description"
+                },
+                {
+                    "name": "details",
+                    "type": "multiline",
+                    "prompt": "Technical Details"
+                },
+                {
+                    "name": "recommendation",
+                    "type": "multiline",
+                    "prompt": "Recommendation"
+                },
+                {
+                    "name": "references",
+                    "type": "multiline",
+                    "prompt": "References"
+                }
+            ],
+            "template": """Acunetix Vulnerability Report
+
+Vulnerability: {title}
+Severity: {severity}
+URL: {url}
+Date: {timestamp}
+
+## Description
+{description}
+
+## Technical Details
+{details}
+
+## Recommendation
+{recommendation}
+
+## References
+{references}"""
         },
         "generic.json": {
             "name": "Generic Report Template",
