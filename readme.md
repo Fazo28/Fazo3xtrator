@@ -125,7 +125,7 @@ git pull
 
 · Check Issues
 · Create new issue if needed
-· Email: support@fazo3xsecurity.com
+· Email: fazodark@gmail.com
 
 ---
 
