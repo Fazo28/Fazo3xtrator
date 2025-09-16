@@ -1,0 +1,6 @@
+
+## Requirements File (requirements.txt)
+
+```txt
+colorama==0.4.4
+requests==2.28.1
